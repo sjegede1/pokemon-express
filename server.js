@@ -1,12 +1,23 @@
 const express = require('express')
 const app = express()
+const mongoose = require('mongoose')
 
 const PORT = 3000;
 
 const pokemon = require('./models/pokemon')
 
+// ===========MIDDLEWARE===========
 app.set("view engine", "jsx");
 app.engine("jsx", require("express-react-views").createEngine());
+
+mongoose.connect(process.env.MONGO_URI,{
+    useNewURIParser: true,
+    UseUnifiedTopology: true
+})
+mongoose.connection.once('open', () => {
+    console.log("Connected to MongoDB 🍃")
+})
+
 
 
 app.get('/', (req,res) => {
@@ -14,6 +25,7 @@ app.get('/', (req,res) => {
 })
 
 app.get('/pokemon', (req,res) => {
+    // Pokemon.find({})
    res.render('Index')
 })
 
