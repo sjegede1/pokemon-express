@@ -1,5 +1,5 @@
 import React from "react";
-import pokemon from "../models/pokemon";
+// import pokemon from "../models/pokemon";
 import DefaultLayout from "../layouts/DefaultLayout";
 
 const myStyle = {
@@ -7,7 +7,9 @@ const myStyle = {
   backgroundColor: "#000000",
 };
 
-function Index() {
+function Index({pokemon}) {
+  // const pokemon = props.pokemon
+  // const {pokemon} = props
   return (
     <DefaultLayout>
       <div style={myStyle}>
