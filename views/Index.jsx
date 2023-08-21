@@ -8,11 +8,10 @@ const myStyle = {
 };
 
 function Index({ pokemon }) {
-  // const pokemon = props.pokemon
-  // const {pokemon} = props
   return (
       <div style={myStyle}>
         <h1>See all Pokemon</h1>
+        <a href="../">Go back</a>
         <ul>
           {pokemon.map((p, i) => {
             return (
