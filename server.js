@@ -36,45 +36,71 @@ app.get("/", (req, res) => {
 
 // ====== CREATE NEW POKEMON ======
 app.get("/create", async (req, res) => {
-  res.render("Create");
+  try {
+    res.render("Create");
+  } catch (error) {
+    res.status(500).send('Create Page no open 😢',error);
+  }
 });
 
 app.post("/create", async (req, res) => {
-  const pokemonName = req.body.name;
-  const newPokemon = await Pokemon.create({
-    name: pokemonName,
-    img: `http://img.pokemondb.net/artwork/${pokemonName}`,
-  });
-  res.redirect("/pokemon");
+
+  try {
+    const pokemonName = await req.body.name.toLowerCase();
+    const newPokemon = await Pokemon.create({
+      name: pokemonName,
+      img: `http://img.pokemondb.net/artwork/${pokemonName}`,
+    });
+    res.redirect("/pokemon");
+  } catch (error) {
+    res.status(500).send(error)
+  }
 });
 
 //===== SHOW ROUTE C[R]UD ===============
 app.get("/pokemon", async (req, res) => {
-  const allPokemon = await Pokemon.find({});
-  res.render("Index", { pokemon: allPokemon }); //<Index pokemon={allPokemon} />
+  try {
+    const allPokemon = await Pokemon.find({});
+    res.render("Index", { pokemon: allPokemon }); //<Index pokemon={allPokemon} />
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 app.get("/pokemon/:id", async (req, res) => {
-  const pokemon = await Pokemon.findById(req.params.id);
-  res.render("Show", { pokemon });
+
+  try {
+    const pokemon = await Pokemon.findById(req.params.id);
+    res.render("Show", { pokemon });
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 // ===========EDIT POKEMON CR[U]D
 app.put("/replace/:id", async (req, res) => {
-  const newPokemon = {
-    name: req.body.name,
-    img: `http://img.pokemondb.net/artwork/${req.body.name}`
-  };
-  console.log(req.body)
-  await Pokemon.findOneAndReplace({_id: req.params.id}, newPokemon);
-  res.redirect('/pokemon')
+
+  try {
+    const newPokemon = {
+      name: req.body.name.toLowerCase(),
+      img: `http://img.pokemondb.net/artwork/${req.body.name}`
+    };
+    await Pokemon.findOneAndReplace({_id: req.params.id}, newPokemon);
+    res.redirect('/pokemon')
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 // ===========DELETE POKEMON CRU[D] ==========
 app.delete("/delete/:id", async (req,res) => {
-  console.log(req.body)
-  await Pokemon.findOneAndDelete({_id: req.params.id})
-  res.redirect('/pokemon')
+
+  try {
+    await Pokemon.findOneAndDelete({_id: req.params.id})
+    res.redirect('/pokemon')
+  } catch (error) {
+    res.status(500).send(error);
+  }
 })
 
 
